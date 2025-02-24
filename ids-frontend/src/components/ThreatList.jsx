@@ -1,17 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-	fetchThreats,
-	addThreat,
-	updateThreat,
-	deleteThreat,
-} from "../utils/api";
+import { fetchThreats, addThreat, deleteThreat } from "../utils/api";
+import styles from "../styles/ThreatList.module.scss"; 
 
 export default function ThreatList() {
 	const [threats, setThreats] = useState([]);
 	const [newThreat, setNewThreat] = useState({ type: "", severity: "" });
-	const [editingThreat, setEditingThreat] = useState(null);
 
 	useEffect(() => {
 		async function loadThreats() {
@@ -24,31 +19,19 @@ export default function ThreatList() {
 	const handleAddThreat = async () => {
 		if (!newThreat.type || !newThreat.severity) return;
 		const addedThreat = await addThreat(newThreat);
-		setThreats([...threats, addedThreat]); // Update UI
-		setNewThreat({ type: "", severity: "" }); // Clear input
-	};
-
-	const handleUpdateThreat = async () => {
-		if (!editingThreat || !editingThreat.type || !editingThreat.severity)
-			return;
-		const updatedThreat = await updateThreat(editingThreat.id, editingThreat);
-		setThreats(
-			threats.map((t) => (t.id === updatedThreat.id ? updatedThreat : t))
-		);
-		setEditingThreat(null); // Reset editing state
+		setThreats([...threats, addedThreat]);
+		setNewThreat({ type: "", severity: "" });
 	};
 
 	const handleDeleteThreat = async (id) => {
 		await deleteThreat(id);
-		setThreats(threats.filter((t) => t.id !== id)); // Remove from UI
+		setThreats(threats.filter((t) => t.id !== id));
 	};
 
 	return (
-		<div className="container">
-			<h1>Intrusion Detection System</h1>
-
-			{/* Add New Threat */}
-			<div>
+		<div className={styles.container}>
+			<h1 className={styles.title}>Intrusion Detection System</h1>
+			<div className={styles.inputGroup}>
 				<input
 					type="text"
 					placeholder="Type (e.g. Malware)"
@@ -63,42 +46,24 @@ export default function ThreatList() {
 						setNewThreat({ ...newThreat, severity: e.target.value })
 					}
 				/>
-				<button onClick={handleAddThreat}>Add Threat</button>
+				<button className={styles.addButton} onClick={handleAddThreat}>
+					Add Threat
+				</button>
 			</div>
-
-			{/* Edit Threat */}
-			{editingThreat && (
-				<div>
-					<h3>Editing Threat</h3>
-					<input
-						type="text"
-						value={editingThreat.type}
-						onChange={(e) =>
-							setEditingThreat({ ...editingThreat, type: e.target.value })
-						}
-					/>
-					<input
-						type="text"
-						value={editingThreat.severity}
-						onChange={(e) =>
-							setEditingThreat({ ...editingThreat, severity: e.target.value })
-						}
-					/>
-					<button onClick={handleUpdateThreat}>Update</button>
-					<button onClick={() => setEditingThreat(null)}>Cancel</button>
-				</div>
-			)}
-
-			{/* Display Threats */}
-			<ul>
+			<ul className={styles.threatList}>
 				{threats.map((threat) => (
-					<li key={threat.id}>
+					<li key={threat.id} className={styles.threatItem}>
 						<strong>{threat.type}</strong> - {threat.severity} -{" "}
 						{new Date(threat.timestamp).toLocaleString()}
-						<button onClick={() => setEditingThreat(threat)}>✏️ Edit</button>
-						<button onClick={() => handleDeleteThreat(threat.id)}>
-							❌ Delete
-						</button>
+						<div className={styles.buttonGroup}>
+							<button className={styles.editButton}>✏️ Edit</button>
+							<button
+								className={styles.deleteButton}
+								onClick={() => handleDeleteThreat(threat.id)}
+							>
+								❌ Delete
+							</button>
+						</div>
 					</li>
 				))}
 			</ul>
