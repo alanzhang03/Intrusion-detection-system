@@ -16,13 +16,25 @@ public class ThreatController {
         this.threatService = threatService;
     }
 
+    // Get all threats
     @GetMapping
     public List<Threat> getAllThreats() {
         return threatService.getAllThreats();
     }
 
+    // Add a new threat
     @PostMapping
     public Threat addThreat(@RequestBody Threat threat) {
         return threatService.addThreat(threat);
+    }
+
+    @PutMapping("/{id}")
+    public Threat updateThreat(@PathVariable Long id, @RequestBody Threat updatedThreat) {
+        return threatService.updateThreat(id, updatedThreat);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteThreat(@PathVariable Long id) {
+        threatService.deleteThreat(id);
     }
 }

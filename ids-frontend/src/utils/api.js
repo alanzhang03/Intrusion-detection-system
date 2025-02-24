@@ -23,6 +23,18 @@ export const addThreat = async (threat) => {
 	}
 };
 
+export const updateThreat = async (id, updatedThreat) => {
+	try {
+		const response = await axios.put(`${API_URL}/${id}`, updatedThreat, {
+			headers: { "Content-Type": "application/json" },
+		});
+		return response.data;
+	} catch (error) {
+		console.error("Error updating threat:", error);
+		throw new Error("Failed to update threat. Please try again.");
+	}
+};
+
 export const deleteThreat = async (id) => {
 	try {
 		await axios.delete(`${API_URL}/${id}`);
