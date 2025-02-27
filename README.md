@@ -16,15 +16,9 @@ A **full-stack security monitoring application** that allows users to track, man
 - **Build Tool**: Maven
 - **Version Control**: Git & GitHub
 
-## 📦 Installation
-
 ### Prerequisites
 - Node.js & npm installed
 - Java 17+ installed
 - Maven installed
 
-### Backend Setup (Spring Boot)
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/yourusername/ids-project.git
-   cd ids
+
